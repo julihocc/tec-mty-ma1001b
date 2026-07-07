@@ -1,0 +1,25 @@
+[project]
+name = "tec-mty-ma1001b"
+version = "0.1.0"
+description = "Data-science-oriented teaching package for MA1001B Statistical Modeling for Decision Making."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "jupyterlab>=4.2",
+    "notebook>=7.2",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scipy>=1.13",
+    "statsmodels>=0.14",
+    "scikit-learn>=1.5",
+    "matplotlib>=3.9",
+    "seaborn>=0.13",
+    "plotly>=5.22",
+    "pyarrow>=16.1",
+    "kaggle>=1.6",
+    "nbformat>=5.10",
+    "nbconvert>=7.16",
+]
+
+[tool.uv]
+package = false
