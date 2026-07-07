@@ -88,3 +88,20 @@ quantification, at least one hypothesis test or model comparison, assumptions,
 limitations, and a recommendation.
 
 See `capstone/capstone_brief.md` for the full specification.
+
+## Pedagogical Commitments
+
+This course is not organized as a sequence of disconnected formulas. Every
+topic is taught through a decision problem, a data representation, a statistical
+model, and a written interpretation. Students are expected to explain why a
+method is appropriate before they use it in Python.
+
+Each week should make three links explicit:
+
+1. Conceptual link: what uncertainty or variability is being modeled.
+2. Computational link: how Python represents the data and calculation.
+3. Decision link: how the result supports, weakens, or qualifies an action.
+
+Instructors should avoid treating notebooks as passive demonstrations. Each
+lesson includes short pauses, checkpoints, and writing prompts so students
+practice statistical reasoning, not only syntax.
