@@ -17,16 +17,16 @@ decision-oriented communication the central learning experience.
 - `capstone/`: final real-data project brief, proposal template, and rubrics.
 - `data/README.md`: dataset download instructions, Kaggle guidance, and file placement rules.
 - `rubrics/`: reusable notebook, assignment, and capstone assessment rubrics.
-- `requirements.txt`: Python packages for the notebooks.
+- `pyproject.toml` and `uv.lock`: uv-managed Python environment for the notebooks.
 - `scripts/`: utility scripts used to generate or validate course artifacts.
 
 ## Quick Start
 
+This project uses `uv` for Python version and dependency management.
+
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-jupyter lab
+uv sync
+uv run jupyter lab
 ```
 
 Datasets are not committed to this repository. Follow `data/README.md` to
@@ -37,13 +37,13 @@ download the required files and place them under `data/raw/`.
 Regenerate the lesson notebooks after editing the lesson source:
 
 ```powershell
-python scripts\generate_lesson_notebooks.py
+uv run python scripts\generate_lesson_notebooks.py
 ```
 
 Validate notebook structure and Python syntax:
 
 ```powershell
-python scripts\validate_notebooks.py
+uv run python scripts\validate_notebooks.py
 ```
 
 ## Teaching Model

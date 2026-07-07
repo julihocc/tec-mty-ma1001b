@@ -24,17 +24,17 @@ download link and local path.
 1. Create or sign in to a Kaggle account.
 2. Create an API token from your Kaggle account settings.
 3. Save `kaggle.json` in the location required by your operating system.
-4. Install the course requirements.
-5. Download the dataset manually or with the Kaggle CLI.
+4. Install the course environment with `uv sync`.
+5. Download the dataset manually or with the Kaggle CLI through `uv run`.
 
 Example:
 
 ```powershell
-kaggle competitions download -c titanic -p data/raw/titanic
-kaggle competitions download -c house-prices-advanced-regression-techniques -p data/raw/house-prices
-kaggle competitions download -c bike-sharing-demand -p data/raw/bike-sharing
-kaggle datasets download -d unsdsn/world-happiness -p data/raw/world-happiness
-kaggle datasets download -d zhangluyuan/ab-testing -p data/raw/ab-testing
+uv run kaggle competitions download -c titanic -p data/raw/titanic
+uv run kaggle competitions download -c house-prices-advanced-regression-techniques -p data/raw/house-prices
+uv run kaggle competitions download -c bike-sharing-demand -p data/raw/bike-sharing
+uv run kaggle datasets download -d unsdsn/world-happiness -p data/raw/world-happiness
+uv run kaggle datasets download -d zhangluyuan/ab-testing -p data/raw/ab-testing
 ```
 
 Some Kaggle competitions require accepting competition rules in the browser
