@@ -152,6 +152,12 @@ uv run python scripts\generate_lesson_notebooks.py
 uv run python scripts\validate_notebooks.py
 ```
 
+### Curriculum Generation Engine & Code Architecture
+
+The repository avoids manual editing of `.ipynb` JSON files by using a centralized, programmatic curriculum generation engine:
+* **`scripts/generate_lesson_notebooks.py` (Curriculum Engine):** Serves as the single source of truth for all 15 lesson notebooks. It defines the entire course in the `LESSONS` data structure—a typed schema specifying titles, syllabus alignments, decision scenarios, conceptual theories, mathematical anchors, learning goals, the three explicit links, sequential code steps, interactive checkpoints, common mistakes, independent practice tasks, and exit tickets. Helper functions (`md()`, `code()`, and `make_notebook()`) assemble these data definitions into standardized Jupyter Notebook v4.5 structures. The script is fully documented with PEP 257 module docstrings, Google-style function docstrings, schema specifications, and Python type annotations (`typing.Any`, `typing.Dict`, `typing.List`).
+* **`scripts/validate_notebooks.py` (Quality Guarantee):** Enforces strict structural and syntactic quality checks across the repository. It verifies that exactly 15 notebooks exist, that each adheres to `nbformat == 4`, that each contains at least 17 cells (guaranteeing full pedagogical scaffolding), and compiles every code cell using Python's built-in `compile(..., mode='exec')` to catch syntax errors or invalid string escapes prior to distribution.
+
 ---
 
 ## 7. Summary for Instructors and Maintainers

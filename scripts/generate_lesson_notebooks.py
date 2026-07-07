@@ -1,8 +1,45 @@
+"""MA1001B Lesson Notebook Curriculum Generator.
+
+This script acts as the single source of truth for the MA1001B course curriculum,
+programmatically generating all 15 interactive Jupyter notebooks in the `lessons/` directory.
+
+Pedagogical Architecture & Scaffolding:
+Instead of passive code demonstrations, each notebook is generated as a structured,
+guided teaching episode adhering to the MA1001B 5-step statistical reasoning cycle:
+    Question -> Data -> Model -> Uncertainty -> Recommendation
+
+Every generated notebook includes standardized pedagogical sections:
+- Title & Official Course Alignment: Explicit mapping to syllabus competencies.
+- How To Use This Lesson: Active learning instructions for students.
+- Learning Goals: Actionable, student-centered competency targets.
+- The Three Explicit Links:
+    1. Conceptual Link: What statistical phenomenon or behavior is being modeled.
+    2. Computational Link: How Python, Pandas, or Scipy represents and manipulates the model.
+    3. Decision Link: How the statistical evidence drives real-world engineering/management action.
+- Decision Scenario & Conceptual Explanation: Real-world framing and theoretical intuition.
+- Mathematical Anchor: Formal statistical equations and notation.
+- Data And Workflow Notes: Practical guidance on datasets and fallback simulation.
+- Practical Python Workflow: Step-by-step interactive code execution with educational comments.
+- Guided Checkpoint: Pair discussion and structured writing prompt.
+- Common Mistakes & Statistical Pitfalls: Warnings against frequent statistical errors.
+- Independent Practice: Hands-on lab for autonomous problem solving.
+- Decision Interpretation Template: 4-part justification framework (Question, Evidence,
+  Uncertainty, Recommendation).
+- Exit Ticket: Reflection prompt to consolidate learning.
+
+Usage:
+    uv run python scripts/generate_lesson_notebooks.py
+"""
+
 import json
 from pathlib import Path
+from typing import Any, Dict, List
 
 
-COMMON_SETUP = """# Import required data science and statistical libraries
+# Standard setup snippet injected as the preamble for Lesson 01 and fallback simulations.
+# Ensures reproducible random number generation (seed 1001), consistent visual styling
+# (Seaborn whitegrid), and clean tabular display formatting across notebooks.
+COMMON_SETUP: str = """# Import required data science and statistical libraries
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -17,7 +54,33 @@ pd.set_option("display.max_columns", 20)
 """
 
 
-LESSONS = [
+# =============================================================================
+# CURRICULUM SCHEMA & LESSON DEFINITIONS
+# =============================================================================
+# Each dictionary in the LESSONS list defines a complete 2-hour lab episode.
+# Required Schema Fields:
+#   - file (str): Target filename in `lessons/` (e.g., '01_python_jupyter_pandas.ipynb').
+#   - title (str): Human-readable lesson title.
+#   - alignment (str): Official MA1001B syllabus competency alignment.
+#   - scenario (str): Real-world decision problem motivating the analysis.
+#   - concept (str): Conceptual explanation of the statistical method and philosophy.
+#   - math (str): Mathematical anchor and fundamental formulas.
+#   - data_note (str): Notes on data loading, Kaggle configuration, or fallback simulation.
+#   - goals (List[str]): 4 specific learning objectives for the session.
+#   - links (Dict[str, str]): The Three Explicit Links:
+#       * 'conceptual': What is modeled.
+#       * 'computational': How Python/Pandas/Scipy represents it.
+#       * 'decision': How it guides practical action.
+#   - code_steps (List[Dict[str, str]]): Sequential workflow steps, where each step has:
+#       * 'title': Section heading for the step.
+#       * 'explanation': Markdown narrative explaining the rationale and logic.
+#       * 'code': Executable Python code snippet with inline comments.
+#   - checkpoint (str): Prompt for the Guided Checkpoint pair discussion and writing.
+#   - mistakes (List[str]): 3 common statistical pitfalls or communication warnings.
+#   - practice (str): Instructions for the Independent Practice lab task.
+#   - exit (str): Conceptual reflection prompt for the Exit Ticket.
+# =============================================================================
+LESSONS: List[Dict[str, Any]] = [
     {
         "file": "01_python_jupyter_pandas.ipynb",
         "title": "Python, Jupyter, And Pandas For Statistical Work",
@@ -1438,7 +1501,16 @@ risk_register
 ]
 
 
-def md(text):
+def md(text: str) -> Dict[str, Any]:
+    """Create a Jupyter Notebook markdown cell dictionary.
+
+    Args:
+        text: The raw markdown text content for the cell.
+
+    Returns:
+        A dictionary formatted as a Jupyter Notebook v4 markdown cell,
+        with each line suffixed by a newline character in the 'source' list.
+    """
     return {
         "cell_type": "markdown",
         "metadata": {},
@@ -1446,7 +1518,16 @@ def md(text):
     }
 
 
-def code(text):
+def code(text: str) -> Dict[str, Any]:
+    """Create a Jupyter Notebook code cell dictionary.
+
+    Args:
+        text: The raw Python code content for the cell.
+
+    Returns:
+        A dictionary formatted as a Jupyter Notebook v4 code cell,
+        with execution count set to None and empty output/metadata structures.
+    """
     return {
         "cell_type": "code",
         "execution_count": None,
@@ -1456,7 +1537,21 @@ def code(text):
     }
 
 
-def make_notebook(lesson):
+def make_notebook(lesson: Dict[str, Any]) -> Dict[str, Any]:
+    """Assemble a complete Jupyter Notebook dictionary from a lesson definition.
+
+    This function constructs the standardized pedagogical scaffolding for MA1001B,
+    weaving together introductory guidance, explicit learning links, real-world
+    scenarios, step-by-step code execution, checkpoints, and reflection templates.
+
+    Args:
+        lesson: A dictionary containing the curriculum metadata, learning goals,
+            explicit links, code steps, and reflection prompts for a single lesson.
+
+    Returns:
+        A complete Jupyter Notebook dictionary adhering to nbformat v4.5, ready
+        for serialization to `.ipynb` JSON format.
+    """
     cells = [
         md(f"# {lesson['title']}\n\n**Official MA1001B Alignment:** *{lesson['alignment']}*"),
         md(
@@ -1531,7 +1626,13 @@ def make_notebook(lesson):
     }
 
 
-def main():
+def main() -> None:
+    """Generate all 15 MA1001B lesson notebooks and save them to the `lessons/` directory.
+
+    Iterates through the `LESSONS` curriculum specification, invokes `make_notebook`
+    for each definition, and writes the formatted JSON to `.ipynb` files with UTF-8
+    encoding and 2-space indentation.
+    """
     lessons_dir = Path("lessons")
     lessons_dir.mkdir(exist_ok=True)
     for lesson in LESSONS:
